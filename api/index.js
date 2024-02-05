@@ -3,6 +3,10 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 
 import userRoutes from './routes/user.route.js';
+import authRoutes from './routes/auth.route.js'; 
+
+const app = express();
+
 dotenv.config();
 
 mongoose
@@ -14,14 +18,14 @@ mongoose
       console.log("Connection error: " + error)
    })
 
-
-const app = express();
-
 app.listen(3000, () => {
    console.log('Example app listening on port 3000!');
 });
 
+app.use(express.json());
+
 app.use("/api/user",userRoutes);
+app.use("/api/auth",authRoutes);
 
 app.use("*", (res, req) => {
    res.send(200).json({message: "404 is not found!"});
