@@ -1,9 +1,11 @@
-import React from 'react'
+import { Link } from 'react-router-dom'
 
-const SignIn = () => {
+const SignUp = () => {
   return (
-    <div>SignIn</div>
+    <div className='min-h-screen '>
+      
+    </div>
   )
 }
 
-export default SignIn
+export default SignUp
