@@ -27,6 +27,12 @@ app.use(express.json());
 app.use("/api/user",userRoutes);
 app.use("/api/auth",authRoutes);
 
-app.use("*", (res, req) => {
-   res.send(200).json({message: "404 is not found!"});
+app.use((error, req, res, next) => {
+   const statusCode = error.statusCode || 500;
+   const message = error.message || "Internal Server Error";
+   res.status(statusCode).json({
+      success: false,
+      statusCode,
+      message,
+   });
 })
