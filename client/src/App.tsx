@@ -6,6 +6,7 @@ import SignIn from "./pages/SignIn"
 import SignUp from "./pages/SignUp"
 import Projects from "./pages/Projects"
 import Header from "./components/Header"
+import FooterCom from "./components/FooterCom"
 
 const App = () => {
   return (
@@ -19,6 +20,7 @@ const App = () => {
         <Route path="/dashboard" element={<Dashboard/>}/>
         <Route path="/projects" element={<Projects />}/>
       </Routes>
+      <FooterCom />
     </BrowserRouter>
   )
 }
