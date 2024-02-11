@@ -1,12 +1,17 @@
 /// <reference types="vite/client" />
 
 interface InitialStateOfUseFetchHook {
-   data: object[]; 
+   data: object[] | object | {
+      success: boolean;
+      statusCode: number;
+      message: string;
+   };
    loading: boolean;
    error: string;
 }
 
-type UseFetchHookType = () => [InitialStateOfUseFetchHook, (url: string) => void];
+type FetchDataType = (url: string, method: string, data: object[] | object) => Promise<any>;
+type UseFetchHookType = () => [InitialStateOfUseFetchHook, FetchDataType];
 
 type ActionsTypeOfUseFetchHook = 
    | {type: "FETCH_START"}
