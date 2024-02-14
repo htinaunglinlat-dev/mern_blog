@@ -10,8 +10,9 @@ interface InitialStateOfUseFetchHook {
    error: string;
 }
 
+// type FetchDataType = (url: string, method: string, data: object[] | object) => Promise<any>;
 type FetchDataType = (url: string, method: string, data: object[] | object) => Promise<any>;
-type UseFetchHookType = () => [InitialStateOfUseFetchHook, FetchDataType];
+// type UseFetchHookType = () => [InitialStateOfUseFetchHook, FetchDataType];
 
 type ActionsTypeOfUseFetchHook = 
    | {type: "FETCH_START"}

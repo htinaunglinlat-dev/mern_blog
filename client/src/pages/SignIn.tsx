@@ -1,41 +1,54 @@
 import { Alert, Button, Label, Spinner, TextInput } from 'flowbite-react';
-import { ChangeEvent, MouseEvent, useEffect, useRef, useState } from 'react';
+import { MouseEvent, useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom'
 import useFetch from '../hooks/useFetch';
+import { useAppSelector } from '../redux/reduxHooks';
 
 const SignUp = () => {
-  const [state, fetchData ] = useFetch()
+  // const [state, fetchData ] = useFetch()
+  const { loading } = useAppSelector(state => state.user)
+  const fetchData = useFetch();
 
   const emailRef = useRef<HTMLInputElement>(null!);
   const passwordRef = useRef<HTMLInputElement>(null!);
   const [alertBox, setAlertBox] = useState<string | null>(null)
 
   const navigate = useNavigate();
+
   const handleSubmit = async (e: MouseEvent<HTMLButtonElement>) => {
-    console.log("handleSubmit", alertBox)
+    // console.log("handleSubmit", alertBox)
     setAlertBox(null);
     e.preventDefault();
-    console.log(emailRef.current.value, passwordRef.current.value)
-    if (emailRef.current.value === "" || passwordRef.current.value === "") 
-      return setAlertBox("All fields are required")
 
-    const formData = {
-      email: emailRef.current.value,
-      password: passwordRef.current.value
-    }
+    // console.log(emailRef.current.value, passwordRef.current.value)
+    const email = emailRef.current.value.trim();
+    const password = passwordRef.current.value.trim();
+
+    if (!email ||!password) {
+      setAlertBox("All fields are required")
+      return 
+    }  
+
+    const formData = { email, password }
+
     try{
       const data = await fetchData("/api/auth/signin","POST", formData); 
-      if(data.success === false) 
-        return setAlertBox(data.message);  
-      return navigate("/")
+      if(data.success === false) {
+        // console.log("success ", data.success)
+        setAlertBox(data.message);  
+        return
+      } 
+      if(typeof data === "string") {
+        setAlertBox(data);
+        return
+      }
+      navigate("/");
+      // console.log("=> data", data)
     } catch (error: any) {
+      console.log("hello world", error)
       setAlertBox(error.message);
     }
   }
-  // useEffect(() => {
-  //   console.warn("useEffect")
-  //   console.log(state)
-  // }, [state])
 
   return (
     <div className='min-h-screen mt-20'>
@@ -71,8 +84,8 @@ const SignUp = () => {
                 ref={passwordRef}
               />
             </div>
-            <Button gradientDuoTone={"purpleToPink"} type={'submit'} onClick={handleSubmit} disabled={state.loading}>
-              { state.loading ? 
+            <Button gradientDuoTone={"purpleToPink"} type={'submit'} onClick={handleSubmit} disabled={loading}>
+              { loading ? 
                 <>
                   <Spinner  size={"sm"}/><span className='pl-3'>Loading ...</span>
                 </>

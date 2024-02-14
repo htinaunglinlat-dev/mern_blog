@@ -1,50 +1,50 @@
 import { Alert, Button, Label, Spinner, TextInput } from 'flowbite-react'
-import { ChangeEvent, MouseEvent, useState } from 'react';
+import { MouseEvent, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom'
+import { useAppSelector } from '../redux/reduxHooks';
+import useFetch from '../hooks/useFetch';
 
 const SignIn = () => {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<any | null>(null);
-  const [formData, setFormData] = useState({
-    username: "",
-    email: "",
-    password: "",
-  })
   const navigate = useNavigate();
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setFormData({...formData, [e.target.id]: e.target.value.trim() })
-  }
-  const handleSubmit = async (e: MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    setLoading(true);
-    if (!formData.username ||!formData.email ||!formData.password) {
-      setError("Please fill in all fields")
-      setLoading(false);
+  const fetchData = useFetch();
+
+  const { loading } = useAppSelector(state => state.user)
+  const [alertBox, setAlertBox] = useState<string | null>(null)
+
+  const usernameRef = useRef<HTMLInputElement>(null!);
+  const emailRef = useRef<HTMLInputElement>(null!);
+  const passwordRef = useRef<HTMLInputElement>(null!);
+
+  const handleSubmit = async(event: MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    setAlertBox(null);
+
+    const username = usernameRef.current.value.trim();
+    const email = emailRef.current.value.trim();
+    const password = passwordRef.current.value.trim();
+
+    if(!username ||!email ||!password) {
+      setAlertBox("All fields are required")
+      return
     }
+
+    const formData = { username, email, password }
     try {
-      const res = await fetch('/api/auth/signup', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      })
-      const data = await res.json();
+      const data = await fetchData("/api/auth/signup", "POST", formData);
       if(data.success === false) {
-        setLoading(false);
-        return setError(data.message)
+        setAlertBox(data.message);  
+        return
       }
-      console.log(data)
-      setLoading(false);
-      if(res.ok) 
-        navigate("/sign-in")
-    } catch (error) {
-      setError((error as Error).message)
-      setLoading(false);
+      if(typeof data === "string") {
+        setAlertBox(data);
+        return
+      }
+      navigate("/");
+    } catch(error: any) {
+      setAlertBox(error.message);
     }
   }
 
-  console.log(formData)
   return (
     <div className='min-h-screen mt-20'>
       <div className="flex p-3 max-w-3xl mx-auto flex-col md:flex-row md:items-center gap-5">
@@ -67,7 +67,7 @@ const SignIn = () => {
                 type='text'
                 placeholder='Username'
                 id='username'
-                onChange={handleChange}
+                ref={usernameRef}
               />
             </div>
             <div className="">
@@ -76,7 +76,7 @@ const SignIn = () => {
                 type='email'
                 placeholder='name@company.com'
                 id='email'
-                onChange={handleChange}
+                ref={emailRef}
               />
             </div>
             <div className="">
@@ -85,7 +85,7 @@ const SignIn = () => {
                 type='password'
                 placeholder='Password'
                 id='password'
-                onChange={handleChange}
+                ref={passwordRef}
               />
             </div>
             <Button gradientDuoTone={"purpleToPink"} type={'submit'} onClick={handleSubmit} disabled={loading}>
@@ -100,7 +100,7 @@ const SignIn = () => {
             <span>Have an account? </span>
             <Link to={"/sign-in"} className='text-blue-500'>Sign in</Link>
           </div>
-          {error && <Alert className='mt-5 ' color={"failure"}>{error}</Alert>}
+          {alertBox && <Alert className='mt-5 ' color={"failure"}>{}</Alert>}
         </div>
 
       </div>
