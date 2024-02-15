@@ -1,10 +1,21 @@
-import userSlice from './slices/userSlice'
-import countSlice from './slices/countSlice'
+import userReducer from './slices/userSlice'
+import countReducer from './slices/countSlice'
 import { combineReducers } from "@reduxjs/toolkit";
+import { persistReducer } from 'redux-persist'
+import storage from "redux-persist/lib/storage"
 
 const rootReducer = combineReducers({
-   user: userSlice,
-   counter: countSlice
+   user: userReducer,
+   counter: countReducer
 })
 
-export default rootReducer;
+const persistConfig = {
+  key: "root",
+  storage,
+  version: 1
+}
+
+const persistedReducer = persistReducer(persistConfig, rootReducer)
+
+// console.log(persistedReducer)
+export default persistedReducer;
