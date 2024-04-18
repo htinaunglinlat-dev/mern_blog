@@ -1,9 +1,22 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: [],
+  content: [
+    "./index.html",
+    "./src/**/*.{js,ts,jsx,tsx}",
+  ],
   theme: {
-    extend: {},
+    fontFamily: {
+      mono: [
+        'ui-monospace, sans-serif',
+        {
+          fontFeatureSettings: 'ui-monospace',
+          fontVariationSettings: 'ui-monospace'
+        },
+      ],
+    },
+    extend: {
+
+    },
   },
   plugins: [],
 }
-

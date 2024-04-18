@@ -1,3 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  .active-menu{
+    color: rgb(51 65 85);
+  }
+  .active-hamburger-menu{
+    color: white;
+    background-color: rgb(80, 93, 111);
+  }
+}
