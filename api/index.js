@@ -1,6 +1,9 @@
 import express from "express";
 import mongoose from "mongoose"
 import env from "dotenv";
+import userRoutes from "./routes/user.route.js";
+import authRoutes from "./routes/auth.route.js";
+
 const app = express();
 
 env.config();
@@ -20,4 +23,12 @@ mongoose.connect(process.env.MONGODB_KEY)
   throw new Error(error);
 })
 
+app.use(express.json())
+
 // console.log(process.env)
+app.get("/api/test", (req, res) => {
+  res.json({"message":"API is working."})
+})
+
+app.use("/api/user", userRoutes);
+app.use("/api/auth", authRoutes);
