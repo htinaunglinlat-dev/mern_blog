@@ -12,32 +12,32 @@ const Header = () => {
       <Link to={"/"} className="self-center whitespace-nowrap text-md sm:text-xl font-semibold dark:text-white">
         Towa Chan
       </Link>
+      
       <form action="">
-        <div className="bg-white p-2 rounded-sm hidden md:block">
-          <input type="text" placeholder="Search ..." className="bg-transparent outline-none active:"/>
+        <label htmlFor="search-box" className="bg-white p-2 rounded-sm hidden md:block cursor-pointer">
+          <input id="search-box" type="text" placeholder="Search ..." className="bg-transparent outline-none active:"/>
           <FontAwesomeIcon icon={faMagnifyingGlass} className="text-slate-500" />
-        </div>
+        </label>
         <FontAwesomeIcon icon={faMagnifyingGlass} className="text-white md:hidden p-2 rounded-xl border-2 border-white cursor-pointer" />
       </form>
 
       <FontAwesomeIcon icon={faMoon} className="w-5 h-5 text-white p-2 rounded-xl border-2 border-white cursor-pointer"/>
 
-      <div className="gap-4 text-slate-200 font-bold hidden md:flex">
+      <div className="gap-4 text-slate-400 font-bold hidden md:flex">
           <MenuList pathTo="/" path="Home" active={path === "/" || path === ""}/>
           <MenuList pathTo="/about" path="About" active={path === "/about"}/>
           <MenuList pathTo="/projects" path="Projects" active={path === "/projects"}/>
       </div>
 
-      <button className="font-semibold border-2 border-white  px-2 py-1 text-white rounded-md transition-all hover:bg-slate-300 hover:text-slate-700 duration-500">Sign In</button>
+      <Link to={"/sign-in"} className="font-semibold border-2 border-white  px-2 py-1 text-white rounded-md transition-all hover:bg-slate-300 hover:text-slate-700 duration-500">Sign In</Link>
 
       <FontAwesomeIcon icon={faBars} className="text-2xl text-slate-100 cursor-pointer md:hidden" onClick={() => setToggle(prev => !prev)}/>
-      { toggle === true && 
-        <div className="absolute top-full bg-slate-300 w-full flex flex-col md:hidden text-slate-600 border-y-2 border-slate-400">
-          <MenuHamburgerList pathTo="/" path="Home" active={path === "/" || path === ""}/>
-          <MenuHamburgerList pathTo="/about" path="About" active={path === "/about"}/>
-          <MenuHamburgerList pathTo="/projects" path="Projects" active={path === "/projects"}/>
-        </div>
-      }
+
+      <div className={`absolute overflow-hidden h-0 top-full bg-slate-300 w-full flex flex-col md:hidden text-slate-600 border-y-2 border-slate-400 transition-all duration-300 ease-in-out ${toggle === true ? "toggle-hamburger-menu" : ""}`}>
+        <MenuHamburgerList pathTo="/" path="Home" active={path === "/" || path === ""}/>
+        <MenuHamburgerList pathTo="/about" path="About" active={path === "/about"}/>
+        <MenuHamburgerList pathTo="/projects" path="Projects" active={path === "/projects"}/>
+      </div>
       
     </nav>
   )

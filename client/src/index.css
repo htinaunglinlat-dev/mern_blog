@@ -4,10 +4,13 @@
 
 @layer base {
   .active-menu{
-    color: rgb(51 65 85);
+    color: rgb(226 232 240);
   }
   .active-hamburger-menu{
     color: white;
     background-color: rgb(80, 93, 111);
+  }
+  .toggle-hamburger-menu{
+    height: 120px !important;
   }
 }
