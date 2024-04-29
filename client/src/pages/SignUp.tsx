@@ -1,7 +1,7 @@
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { MouseEventHandler, useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useFetch } from "../hooks/useFetch.js";
 
 export type ResponseSuccess = {
@@ -16,6 +16,7 @@ export type ResponseFail = {
 }
 
 const SignUp = () => {
+  const navigate = useNavigate();
   const usernameRef = useRef<HTMLInputElement>(null!);
   const emailRef = useRef<HTMLInputElement>(null!);
   const passwordRef = useRef<HTMLInputElement>(null!);
@@ -72,7 +73,8 @@ const SignUp = () => {
       })
       if(error) setErrorAlert(error);
       else if(data?.success === true) {
-        console.log(data);
+        // console.log(data);
+        navigate("/")
       }
       else if(data?.success === false) {
         setErrorAlert(data.message);
@@ -98,10 +100,10 @@ const SignUp = () => {
       <div className="box-border flex">
         <form action="" className="flex flex-col gap-4 w-full justify-center">
           <h1 className="font-bold text-slate-500 text-3xl my-2">Sign Up</h1>
-          <InputElement content="username" inputType="text" inputRef={usernameRef}/>
-          <InputElement content="email" inputType="email" inputRef={emailRef}/>
-          <InputElement content="password" inputType="password" inputRef={passwordRef}/>
-          <InputElement content="confirm-password" inputType="password" inputRef={confirmPasswordRef}/>
+          <InputElement content="username" inputType="text" inputRef={usernameRef} placeholder={"username"}/>
+          <InputElement content="email" inputType="email" inputRef={emailRef} placeholder={"example@gmail.com"}/>
+          <InputElement content="password" inputType="password" inputRef={passwordRef} placeholder="**********"/>
+          <InputElement content="confirm-password" inputType="password" inputRef={confirmPasswordRef} placeholder="**********"/>
 
           { errorAlert && <span className="text-red-400 font-semibold max-w-80">{errorAlert}</span>}
 
@@ -122,9 +124,10 @@ type InputElementType = {
   content: string;
   inputType: string;
   inputRef: React.RefObject<HTMLInputElement>
+  placeholder: string
 }
 
-const InputElement: React.FC<InputElementType> = ({content, inputType, inputRef}) => {
+const InputElement: React.FC<InputElementType> = ({content, inputType, inputRef, placeholder}) => {
   return (
     <label htmlFor={content} className="flex flex-col gap-1 w-80">
       <span className="text-slate-600 font-bold">{
@@ -133,7 +136,7 @@ const InputElement: React.FC<InputElementType> = ({content, inputType, inputRef}
         // "confirm-password" => ["confirm", "password"] => "Confirm Password"
         content.split("-").map(item => item[0].toUpperCase() + item.slice(1)).join(" ")
       }</span>
-      <input type={inputType} id={content} placeholder={content} ref={inputRef} className="py-2 px-3 border-2 border-slate-500 rounded-md bg-slate-100 w-full" required={true} />
+      <input type={inputType} id={content} ref={inputRef} className="py-2 px-3 border-2 border-slate-500 rounded-md bg-slate-100 w-full" required={true} placeholder={placeholder} />
     </label>
   ) 
 }
